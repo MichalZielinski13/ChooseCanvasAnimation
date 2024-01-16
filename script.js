@@ -5,19 +5,19 @@ dropdown.addEventListener('change', function (e) {
 })
 
 const canvas = document.getElementById('canvas1');
-const ctx = canvas.getContext('2d'); //zwraca rysunek w canvas
-const CANVAS_WIDTH = canvas.width = 600; //szerokość rysunku
-const CANVAS_HEIGHT = canvas.height = 600; //wysokość rysunku
+const ctx = canvas.getContext('2d');
+const CANVAS_WIDTH = canvas.width = 600;
+const CANVAS_HEIGHT = canvas.height = 600;
 
-const playerImage = new Image(); //tworzy element zdjęcie
-playerImage.src = 'shadow_dog.png'; //daje źródło zdjęciu
-const spriteWidth = 575; //szerokość pojedyńczego duszka
-const spriteHeight = 523; //wysokość pojedyńczego duszka
+const playerImage = new Image();
+playerImage.src = 'shadow_dog.png';
+const spriteWidth = 575;
+const spriteHeight = 523;
 
 let gameFrame = 0;
 const staggerFrames = 15;
 const spriteAnimations = [];
-const animationStates = [ //miejscę na mapę canvy
+const animationStates = [
     {
         name: "idle",
         frames: 7
@@ -60,12 +60,10 @@ const animationStates = [ //miejscę na mapę canvy
     }
 ];
 animationStates.forEach((state, index) => {
-    //porusza się pomiędzy obrazkami i tworzy struktury danych (koordynatów)                 
-    //state - poszczególny element na płótnie, index - reprezentuje index poszczególnego elementu tablicy
     let frames = {
         loc: [],
     }
-    for (let j = 0; j < state.frames; j++) { //kalkuluje koordynaty pozycji x i y dla każdego obrazka
+    for (let j = 0; j < state.frames; j++) {
         let positionX = j * spriteWidth;
         let positionY = index * spriteHeight;
         frames.loc.push({ x: positionX, y: positionY });
@@ -73,14 +71,12 @@ animationStates.forEach((state, index) => {
     spriteAnimations[state.name] = frames;
 });
 
-function animate() { //funkcja animacyjna
-    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); //usuwa starą farbę z każdej klatki animacji, czyści miejsce animacji
-    let position = Math.floor(gameFrame / staggerFrames) % spriteAnimations[playerState].loc.length;; //przesuwa pomiędzy obrazkami
+function animate() {
+    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    let position = Math.floor(gameFrame / staggerFrames) % spriteAnimations[playerState].loc.length;;
     let frameX = spriteWidth * position;
     let frameY = spriteAnimations[playerState].loc[position].y;
-    //ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh); s - obszar, który chcemy wyciąć (source), d - obszar, gdzie chcemy rysować (destination)
     ctx.drawImage(playerImage, frameX, frameY, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight)
-    //zdjęcie, które chcemy do animacji, koordynaty, gdzie chcemy żeby narysowało się nasze zdjęcie, wysokość miejsca, szerokość miejsca
 
     gameFrame++;
     requestAnimationFrame(animate)
